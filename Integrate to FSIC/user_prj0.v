@@ -238,17 +238,17 @@ always @(posedge axi_clk or negedge axi_reset_n)  begin
   end
 end
 
-EdgeDetect_Top_a U_EdgeDetect (
+EdgeDetect_Top U_EdgeDetect (
 .clk                     (axi_clk           ), //user_clock2 ?
 .rst                     (reg_rst           ), 
 .arst_n                  (axi_reset_n       ), //~uck2_rst_n ? 
 .widthIn                 (reg_widthIn       ), //I 
 .heightIn                (reg_heightIn      ), //I
-.sw_in_rsc_dat           (reg_sw_in         ), //I
-/*.crc32_pix_in_rsc_dat    (crc32_stream_in   ), //O
+.sw_in                   (reg_sw_in         ), //I
+.crc32_pix_in_rsc_dat    (crc32_stream_in   ), //O
 .crc32_pix_in_triosy_lz  (),                   //O, not useful
 .crc32_dat_out_rsc_dat   (crc32_stream_out  ), //O
-.crc32_dat_out_triosy_lz (edgedetect_done   ), //O*/
+.crc32_dat_out_triosy_lz (edgedetect_done   ), //O
 .dat_in_rsc_dat          (dat_in_rsc_dat    ), //I
 .dat_in_rsc_vld          (ss_tvalid         ), //I
 .dat_in_rsc_rdy          (dat_in_rsc_rdy    ), //O

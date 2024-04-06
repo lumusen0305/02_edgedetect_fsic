@@ -400,6 +400,7 @@ FSIC #(
     $dumpfile("FSIC_FIR.vcd");
     $dumpvars(0, tb_fsic);
 	end
+	
     initial begin
 		ioclk_source=0;
         soc_resetb = 0;
