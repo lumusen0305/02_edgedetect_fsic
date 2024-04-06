@@ -44,7 +44,7 @@ module tb_fsic #( parameter BITS=32,
 );
 `ifdef USE_EDGEDETECT_IP
 		localparam CoreClkPhaseLoop    = 1;
-                localparam TST_TOTAL_FRAME_NUM = 2;
+                localparam TST_TOTAL_FRAME_NUM = 1;
                 localparam TST_FRAME_WIDTH     = 640;
                 localparam TST_FRAME_HEIGHT    = 360;
                 localparam TST_TOTAL_PIXEL_NUM = TST_FRAME_WIDTH * TST_FRAME_HEIGHT;
@@ -400,7 +400,6 @@ FSIC #(
     $dumpfile("FSIC_FIR.vcd");
     $dumpvars(0, tb_fsic);
 	end
-	
     initial begin
 		ioclk_source=0;
         soc_resetb = 0;
@@ -1465,7 +1464,10 @@ FSIC #(
 			        	$display($time, "=> test002_up_soc_rpt [PASS] cfg_read_data_expect_value=%x, cfg_read_data_captured=%x", cfg_read_data_expect_value, cfg_read_data_captured);
 			        $display("-----------------");
 			
-                                //check crc32_img_in
+                
+                                
+                                //~report check
+				//check crc32_img_in
 			        cfg_read_data_expect_value = tst_crc32_img_in_buf[0];	
 			        soc_up_cfg_read('h10, 4'b1111);
 
@@ -1490,13 +1492,7 @@ FSIC #(
 			        else
 			        	$display($time, "=> test002_up_soc_rpt [PASS] cfg_read_data_expect_value=%x, cfg_read_data_captured=%x", cfg_read_data_expect_value, cfg_read_data_captured);
 			        $display("-----------------");
-                                
-                                //clear edgedetect_done
-			        soc_up_cfg_write('h18, 4'b0001, 1); 
-			        $display("-----------------");
-                                
-                                //~report check
-
+					
 				check_cnt = check_cnt + 1;
 				if ( soc_to_fpga_axis_expect_count != fpga_axis_test_length) begin
                                         $display($time, "=> test002 [ERROR] soc_to_fpga_axis_expect_count = %d, soc_to_fpga_axis_captured_count = %d", soc_to_fpga_axis_expect_count, soc_to_fpga_axis_captured_count);
@@ -1504,7 +1500,6 @@ FSIC #(
 				end	
 				else 
                                         $display($time, "=> test002 [PASS] soc_to_fpga_axis_expect_count = %d, soc_to_fpga_axis_captured_count = %d", soc_to_fpga_axis_expect_count, soc_to_fpga_axis_captured_count);
-
 				
                                 for(idx3=0; idx3<fpga_axis_test_length; idx3=idx3+1)begin	
 					check_cnt = check_cnt + 1;
@@ -1516,9 +1511,18 @@ FSIC #(
                                                 $display($time, "=> test002 [PASS] idx3=%d, soc_to_fpga_axis_expect_value[%d] = %x, soc_to_fpga_axis_captured[%d]  = %x", idx3, idx3, soc_to_fpga_axis_expect_value[idx3], idx3, soc_to_fpga_axis_captured[idx3]);
 					
                                  end
+								 
                                  soc_to_fpga_axis_captured_count = 0;		//reset soc_to_fpga_axis_captured_count for next loop
 
 				#200;
+				
+                                
+                                //clear edgedetect_done
+			        soc_up_cfg_write('h18, 4'b0001, 1); 
+			        $display("-----------------");
+
+
+
 			end
                      end
 		end

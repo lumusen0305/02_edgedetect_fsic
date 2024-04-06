@@ -1861,8 +1861,8 @@ endmodule
 module EdgeDetect_IP_EdgeDetect_MagAng (
   clk, rst, arst_n, dx_in_rsc_dat, dx_in_rsc_vld, dx_in_rsc_rdy, dy_in_rsc_dat, dy_in_rsc_vld,
       dy_in_rsc_rdy, pix_chan2_rsc_dat, pix_chan2_rsc_vld, pix_chan2_rsc_rdy, widthIn_rsc_dat,
-      widthIn_triosy_lz, heightIn_rsc_dat, heightIn_triosy_lz, sw_in_rsc_dat, sw_in_triosy_lz,
-      crc32_pix_in_rsc_dat, crc32_pix_in_triosy_lz, crc32_dat_out_rsc_dat, crc32_dat_out_triosy_lz,
+      widthIn_triosy_lz, heightIn_rsc_dat, heightIn_triosy_lz, sw_in, sw_in_triosy_lz,
+      crc32_pix_in_rsc_zout, crc32_pix_in_triosy_lz, crc32_dat_out_rsc_zout, crc32_dat_out_triosy_lz,
       dat_out_rsc_dat, dat_out_rsc_vld, dat_out_rsc_rdy
 );
   input clk;
@@ -1881,11 +1881,11 @@ module EdgeDetect_IP_EdgeDetect_MagAng (
   output widthIn_triosy_lz;
   input [8:0] heightIn_rsc_dat;
   output heightIn_triosy_lz;
-  input sw_in_rsc_dat;
+  input sw_in;
   output sw_in_triosy_lz;
-  output [31:0] crc32_pix_in_rsc_dat;
+  output [31:0] crc32_pix_in_rsc_zout;
   output crc32_pix_in_triosy_lz;
-  output [31:0] crc32_dat_out_rsc_dat;
+  output [31:0] crc32_dat_out_rsc_zout;
   output crc32_dat_out_triosy_lz;
   output [33:0] dat_out_rsc_dat;
   output dat_out_rsc_vld;
@@ -5721,10 +5721,10 @@ endmodule
 // ------------------------------------------------------------------
 
 
-module EdgeDetect_IP_EdgeDetect_Top (
-  clk, rst, arst_n, widthIn, heightIn, sw_in_rsc_dat, sw_in_triosy_lz, crc32_pix_in_rsc_zout,
-      crc32_pix_in_rsc_lzout, crc32_pix_in_rsc_zin, crc32_pix_in_triosy_lz, crc32_dat_out_rsc_zout,
-      crc32_dat_out_rsc_lzout, crc32_dat_out_rsc_zin, crc32_dat_out_triosy_lz, dat_in_rsc_dat,
+module EdgeDetect_Top_b (
+  clk, rst, arst_n, widthIn, heightIn, sw_in, sw_in_triosy_lz, crc32_pix_in_rsc_dat,
+      crc32_pix_in_rsc_lzout, crc32_pix_in_triosy_lz, crc32_dat_out_rsc_dat,
+      crc32_dat_out_rsc_lzout, crc32_dat_out_triosy_lz, dat_in_rsc_dat,
       dat_in_rsc_vld, dat_in_rsc_rdy, dat_out_rsc_dat, dat_out_rsc_vld, dat_out_rsc_rdy,
       line_buf0_rsc_en, line_buf0_rsc_q, line_buf0_rsc_we, line_buf0_rsc_d, line_buf0_rsc_adr,
       line_buf1_rsc_en, line_buf1_rsc_q, line_buf1_rsc_we, line_buf1_rsc_d, line_buf1_rsc_adr
@@ -5734,15 +5734,15 @@ module EdgeDetect_IP_EdgeDetect_Top (
   input arst_n;
   input [9:0] widthIn;
   input [8:0] heightIn;
-  input sw_in_rsc_dat;
+  input sw_in;
   output sw_in_triosy_lz;
-  output [31:0] crc32_pix_in_rsc_zout;
+  output [31:0] crc32_pix_in_rsc_dat;
   output crc32_pix_in_rsc_lzout;
-  input [31:0] crc32_pix_in_rsc_zin;
+  wire  [31:0] crc32_pix_in_rsc_zin;
   output crc32_pix_in_triosy_lz;
-  output [31:0] crc32_dat_out_rsc_zout;
+  output [31:0] crc32_dat_out_rsc_dat;
   output crc32_dat_out_rsc_lzout;
-  input [31:0] crc32_dat_out_rsc_zin;
+  wire [31:0] crc32_dat_out_rsc_zin;
   output crc32_dat_out_triosy_lz;
   input [33:0] dat_in_rsc_dat;
   input dat_in_rsc_vld;
@@ -5801,7 +5801,6 @@ module EdgeDetect_IP_EdgeDetect_Top (
   wire crc32_dat_out_triosy_lz_n_MagAng_inst_bud;
   wire dy_chan_unc_1;
   wire dy_chan_idle;
-
 
   // Interconnect Declarations for Component Instantiations 
   ccs_pipe_v6 #(.rscid(32'sd35),
@@ -5886,15 +5885,15 @@ module EdgeDetect_IP_EdgeDetect_Top (
       .widthIn_triosy_lz(widthIn_triosy_lz_n_MagAng_inst_bud),
       .heightIn_rsc_dat(9'b000000000),
       .heightIn_triosy_lz(heightIn_triosy_lz_n_MagAng_inst_bud),
-      .sw_in_rsc_dat(sw_in_rsc_dat),
+      .sw_in(sw_in_rsc_dat),
       .sw_in_triosy_lz(sw_in_triosy_lz_n_MagAng_inst_bud),
       .crc32_pix_in_rsc_zout(crc32_pix_in_rsc_zout_n_MagAng_inst),
-      .crc32_pix_in_rsc_lzout(crc32_pix_in_rsc_lzout_n_MagAng_inst_bud),
-      .crc32_pix_in_rsc_zin(crc32_pix_in_rsc_zin),
+      //.crc32_pix_in_rsc_lzout(crc32_pix_in_rsc_lzout_n_MagAng_inst_bud),
+      //.crc32_pix_in_rsc_zin(crc32_pix_in_rsc_zin),
       .crc32_pix_in_triosy_lz(crc32_pix_in_triosy_lz_n_MagAng_inst_bud),
       .crc32_dat_out_rsc_zout(crc32_dat_out_rsc_zout_n_MagAng_inst),
-      .crc32_dat_out_rsc_lzout(crc32_dat_out_rsc_lzout_n_MagAng_inst_bud),
-      .crc32_dat_out_rsc_zin(crc32_dat_out_rsc_zin),
+      //.crc32_dat_out_rsc_lzout(crc32_dat_out_rsc_lzout_n_MagAng_inst_bud),
+      //.crc32_dat_out_rsc_zin(crc32_dat_out_rsc_zin),
       .crc32_dat_out_triosy_lz(crc32_dat_out_triosy_lz_n_MagAng_inst_bud),
       .dat_out_rsc_dat(dat_out_rsc_dat_n_MagAng_inst),
       .dat_out_rsc_vld(dat_out_rsc_vld_n_MagAng_inst_bud),
@@ -5918,4 +5917,7 @@ module EdgeDetect_IP_EdgeDetect_Top (
   assign crc32_dat_out_rsc_lzout = crc32_dat_out_rsc_lzout_n_MagAng_inst_bud;
   assign crc32_dat_out_rsc_zout = crc32_dat_out_rsc_zout_n_MagAng_inst;
   assign crc32_dat_out_triosy_lz = crc32_dat_out_triosy_lz_n_MagAng_inst_bud;
+
+  assign crc32_pix_in_rsc_zin=dat_in_rsc_dat;
+  assign crc32_dat_out_rsc_zin=dat_out_rsc_dat_n_HorDer_inst;
 endmodule

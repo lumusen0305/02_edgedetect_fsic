@@ -238,7 +238,7 @@ always @(posedge axi_clk or negedge axi_reset_n)  begin
   end
 end
 
-EdgeDetect_Top U_EdgeDetect (
+EdgeDetect_Top_b U_EdgeDetect (
 .clk                     (axi_clk           ), //user_clock2 ?
 .rst                     (reg_rst           ), 
 .arst_n                  (axi_reset_n       ), //~uck2_rst_n ? 
